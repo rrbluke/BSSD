@@ -1,4 +1,4 @@
-Complex Neural Beamformer
+Blind Speech Separation and Dereverberation
 =========================
 
 
@@ -44,7 +44,7 @@ python rir_loader.py
 ```
 
 
-To generate the a set of 100 DOA bases, use:
+To generate a set of 100 DOA bases, use:
 ```
 cd loaders
 python doa bases.py
