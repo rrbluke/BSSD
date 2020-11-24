@@ -73,7 +73,7 @@ Due to the custom complex-valued layers, training for the FD takes roughly 8 tim
 
 
 Validation
----------
+----------
 
 To validate the models, use:
 ```
@@ -93,13 +93,16 @@ python bssd_combined_td.py plot
 
 
 Performance
----------
+-----------
 
+Mixture with 2 speakers, separated and dereverberated using the 'bssd_combined_td' model
 ![predicitons](predictions/bssd_combined_td_shoebox_spectrogram.png "Mixture with with 2 speakers, separated predictions y1, y2")
 
+SI-SDR and EER after 10^5 training epochs of the 'bssd_combined_td' model
 ![predicitons](predictions/si_sdr.png "SI-SDR for 2 speakers")
 
-![predicitons](predictions/eer.png "Equal Error Rate for the 101 WSJ0 speakers")
+False Accaptance and Rejection Rates for the 101 WSJ0 speakers of the 'bssd_combined_td' model
+![predicitons](predictions/eer.png "False Accaptance and Rejection Rates for the 101 WSJ0 speakers")
 
 
 
