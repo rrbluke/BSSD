@@ -61,8 +61,17 @@ class bssd(object):
 
         self.beamforming = beamforming(self.fgen)
         self.identification = identification(self.fgen)
-
         self.create_model()
+
+        self.si_sdr = []
+        self.eer = []
+        self.epoch = 0
+        data = load_numpy_from_mat(self.predictions_file)
+        if data is not None:
+            if 'epoch' in data.keys():
+                self.epoch = data['epoch']
+                self.si_sdr = data['si_sdr']
+                self.eer = data['eer']
 
 
 
@@ -105,15 +114,14 @@ class bssd(object):
     def train(self):
 
         print('train the model')
-        i = 0
-        while (i<self.config['epochs']) and self.check_date():
+        while (self.epoch<self.config['epochs']) and self.check_date():
 
             sid0 = self.fgen.generate_triplet_indices(speakers=20, utterances_per_speaker=3)
             z, r, sid, pid = self.fgen.generate_multichannel_mixtures(nsrc=self.nsrc, sid=sid0)
             self.model.fit([z, r, pid[:,0], sid[:,0]], None, batch_size=len(sid0), epochs=1, verbose=0, shuffle=False, callbacks=[self.logger])
 
-            i += 1
-            if (i%100)==0:
+            self.epoch += 1
+            if (self.epoch%100)==0:
                 self.save_weights()
                 self.validate()
 
@@ -126,10 +134,12 @@ class bssd(object):
         z, r, sid, pid = self.fgen.generate_multichannel_mixtures(nsrc=self.nsrc, sid=sid)
         y, E = self.model.predict([z, r, pid[:,0], sid[:,0]], batch_size=50)
 
-        SI_SDR = self.beamforming.si_sdr(r, y)
-        FAR, FRR, EER = self.identification.calc_eer(E, sid[:,0])
-        print('SI-SDR:', SI_SDR)
-        print('EER:', EER)
+        si_sdr = self.beamforming.si_sdr(r, y)
+        far, frr, eer = self.identification.calc_eer(E, sid[:,0])
+        print('SI-SDR:', si_sdr)
+        print('EER:', eer)
+        self.si_sdr = np.append(self.si_sdr, si_sdr)
+        self.eer = np.append(self.eer, eer)
 
         data = {
             'z': z[0,:,0],
@@ -138,8 +148,11 @@ class bssd(object):
             'E': E,
             'pid': pid,
             'sid': sid,
-            'FAR': FAR,
-            'FRR': FRR,
+            'far': far,
+            'frr': frr,
+            'si_sdr': self.si_sdr,
+            'eer': self.eer,
+            'epoch': self.epoch,
         }
         save_numpy_to_mat(self.predictions_file, data)
 
@@ -155,7 +168,7 @@ class bssd(object):
         data.append( 20*np.log10(np.abs(mstft(z0))) )
 
         for c in range(self.nsrc):
-            y = self.model.predict([z, r, pid[:,c]])
+            y, E = self.model.predict([z, r, pid[:,c], sid[:,c]])
             y0 = y[0,:]/np.amax(np.abs(y[0,:]))
             data.append( 20*np.log10(np.abs(mstft(y0))) )
 

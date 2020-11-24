@@ -78,7 +78,7 @@ Validation
 To validate the models, use:
 ```
 cd experiments
-python bssd_combined_td.py mode=valid
+python bssd_combined_td.py valid
 ```
 
 This will generate a single prediction, plotting the SI-SDR and EER scores.
@@ -87,8 +87,19 @@ Also, a matlab container containing the enhanced wavs will be written in the 'pr
 To generate a spectrogram plot showing the mixture, and the separated and dereverberated estimates, use:
 ```
 cd experiments
-python bssd_combined_td.py mode=plot
+python bssd_combined_td.py plot
 ```
+
+
+
+Performance
+---------
+
+![predicitons](predictions/bssd_combined_td_shoebox_spectrogram.png "Mixture with with 2 speakers, separated predictions y1, y2")
+
+![predicitons](predictions/si_sdr.png "SI-SDR for 2 speakers")
+
+![predicitons](predictions/eer.png "Equal Error Rate for the 101 WSJ0 speakers")
 
 
 
