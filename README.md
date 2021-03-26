@@ -114,14 +114,13 @@ Citation
 Please cite our work as 
 
 ```
-@INPROCEEDINGS{8683517,
-  author={L. {Pfeifenberger} and M. {Zöhrer} and F. {Pernkopf}},
-  booktitle={ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
-  title={Deep Complex-valued Neural Beamformers}, 
-  year={2019},
-  volume={},
-  number={},
-  pages={2902-2906},
+@misc{pfeifenberger2021blind,
+      title={Blind Speech Separation and Dereverberation using Neural Beamforming}, 
+      author={Lukas Pfeifenberger and Franz Pernkopf},
+      year={2021},
+      eprint={2103.13443},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD}
 }
 ```
 
